@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
-"""Write the agency poem to /output/entry.txt.
+"""Entry for the agency poem competition: "The Latch".
 
-Deterministic: every run writes the exact same UTF-8 bytes.
-Standard library only, no network.
+An original poem about agency — the power to act, choose, and shape
+your own path — written as UTF-8 text to /output/entry.txt.
+
+Deterministic: every run writes the exact same bytes, with no
+network access and no dependencies beyond the standard library.
 """
 
 from pathlib import Path
+
+OUTPUT_PATH = Path("/output/entry.txt")
+ENCODING = "utf-8"
 
 POEM = """The Latch
 
@@ -30,10 +36,18 @@ I chose to row.
 """
 
 
+def write_poem(path: Path = OUTPUT_PATH) -> None:
+    """Write POEM to path, creating the parent directory if needed.
+
+    Writes explicit UTF-8 bytes so the output is byte-identical on
+    any platform, with no newline translation.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(POEM.encode(ENCODING))
+
+
 def main() -> None:
-    output_path = Path("/output/entry.txt")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(POEM, encoding="utf-8")
+    write_poem()
 
 
 if __name__ == "__main__":
